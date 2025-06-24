@@ -128,5 +128,30 @@
     </table>
   </div>
 </main>
+	  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+	<script>
+      $(document).ready(function() {
+        // Add 'active' class to the clicked navigation item
+        $(".navbar-nav .nav-link").on("click", function() {
+          $(".navbar-nav").find(".active").removeClass("active");
+          $(this).addClass("active");
+        });
+
+        // Add 'active' class to the navigation item based on the current scroll position
+        $(window).on("scroll", function() {
+          var scrollPos = $(document).scrollTop();
+          $(".section").each(function() {
+            var offsetTop = $(this).offset().top - 50;
+            var sectionId = $(this).attr("id");
+
+            if (scrollPos >= offsetTop) {
+              $(".navbar-nav").find(".active").removeClass("active");
+              $(".navbar-nav").find("[href='#" + sectionId + "']").addClass("active");
+            }
+          });
+        });
+      });
+    </script>
 </body>
 </html>
