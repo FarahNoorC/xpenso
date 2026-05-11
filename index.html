@@ -1,281 +1,430 @@
 <!DOCTYPE html>
-<!--  -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" type="image/x-icon" href="image/logo.png">
-    
-    <title>Xpenso</title>
-    <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-	  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-
-    <!-- Custom styles for this template -->
-    <link href="css/carousel.css" rel="stylesheet">
-	<style>
-
-    body {
-      
-      background-image: url('image/12.png');
-	  background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center;
-    }
-    
-  </style>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Xpenso — Smart Data Tools</title>
+  <link rel="icon" type="image/png" href="image/logo.png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Cabin:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
-	.cover{
-	background: linear-gradient(to top, rgba(255, 255, 255, 0.8), transparent), url('image/13.png') repeat center center;
-      background-size: auto;
-	}
+    :root {
+      --hot:    #FF2D78;
+      --sun:    #FFD000;
+      --volt:   #7B2FFF;
+      --ice:    #00E5FF;
+      --mint:   #00FF9D;
+      --ink:    #09090F;
+      --r: 22px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Cabin', sans-serif; background: var(--ink); color: #fff; overflow-x: hidden; }
+
+    /* ── BLOB BG ── */
+    #blobs { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .b { position: absolute; border-radius: 50%; filter: blur(90px); animation: pulse 10s ease-in-out infinite alternate; }
+    .b1 { width: 600px; height: 600px; background: var(--volt); opacity: .28; top: -200px; left: -150px; animation-duration: 12s; }
+    .b2 { width: 480px; height: 480px; background: var(--hot);  opacity: .3;  bottom: -150px; right: -120px; animation-duration: 9s;  animation-delay:-3s; }
+    .b3 { width: 380px; height: 380px; background: var(--ice);  opacity: .22; top: 45%; left: 35%;  animation-duration: 14s; animation-delay:-6s; }
+    .b4 { width: 300px; height: 300px; background: var(--sun);  opacity: .25; top: 55%; right: 15%; animation-duration: 11s; animation-delay:-1s; }
+    @keyframes pulse { from { transform: scale(1) translate(0,0); } to { transform: scale(1.12) translate(30px,20px); } }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 999;
+      background: rgba(9,9,15,.88); backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 70px;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 1.55rem;
+      text-decoration: none; letter-spacing: -1px;
+      background: linear-gradient(90deg, var(--hot), var(--sun));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .brand img { width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0; }
+    .links { display: flex; gap: .15rem; list-style: none; }
+    .links a {
+      color: rgba(255,255,255,.6); text-decoration: none;
+      padding: .42rem .9rem; border-radius: 10px;
+      font-size: .9rem; font-weight: 600; transition: background .18s, color .18s;
+    }
+    .links a:hover { background: rgba(255,255,255,.09); color: #fff; }
+    .links a.on { background: linear-gradient(90deg,var(--hot),#ff8240); color:#fff; }
+    .npill {
+      background: linear-gradient(90deg, var(--volt), var(--ice));
+      color: #fff; padding: .5rem 1.2rem; border-radius: 99px;
+      font-weight: 800; font-size: .88rem; text-decoration: none;
+      transition: transform .15s, box-shadow .2s;
+    }
+    .npill:hover { transform: scale(1.06); box-shadow: 0 0 22px rgba(123,47,255,.6); }
+    .ham { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 6px; }
+    .ham span { width: 22px; height: 2px; background: #fff; border-radius: 2px; }
+
+    /* ── Z WRAP ── */
+    .z { position: relative; z-index: 1; }
+
+    /* ── HERO ── */
     .hero {
-      height: 70vh;
-      color: black;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 0 20px;
+      min-height: 93vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 5rem 2rem 4rem;
+      position: relative; z-index: 1;
+    }
+    .htag {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,208,0,.14); border: 1.5px solid rgba(255,208,0,.45);
+      color: var(--sun); padding: .38rem 1.1rem; border-radius: 99px;
+      font-size: .8rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
+      margin-bottom: 1.8rem;
+      animation: popIn .55s cubic-bezier(.34,1.56,.64,1) both;
     }
     .hero h1 {
-      font-size: 3rem;
-      font-weight: bold;
+      font-family: 'Nunito', sans-serif;
+      font-size: clamp(3rem, 7.5vw, 5.8rem);
+      font-weight: 900; line-height: 1.03; letter-spacing: -2.5px;
+      margin-bottom: 1.4rem;
+      animation: riseUp .7s .1s cubic-bezier(.22,1,.36,1) both;
+    }
+    .hero h1 .w1 { color: var(--sun); display: inline-block; transform: rotate(-2.5deg); }
+    .hero h1 .w2 {
+      background: linear-gradient(100deg, var(--hot) 0%, var(--volt) 60%, var(--ice) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
     .hero p {
-      font-size: 1.2rem;
+      color: rgba(255,255,255,.58); font-size: 1.15rem;
+      max-width: 550px; margin: 0 auto 2.8rem; line-height: 1.72;
+      animation: riseUp .7s .22s cubic-bezier(.22,1,.36,1) both;
+    }
+    .hbtns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; animation: riseUp .7s .34s cubic-bezier(.22,1,.36,1) both; }
+    .bpop { padding: .88rem 2.1rem; border-radius: 14px; font-weight: 800; font-size: 1rem; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: transform .15s, box-shadow .2s; }
+    .bpop:hover { transform: translateY(-3px) scale(1.03); }
+    .bhot  { background: linear-gradient(135deg,var(--hot),#FF7B2F); color:#fff; box-shadow: 0 8px 30px rgba(255,45,120,.4); }
+    .bhot:hover  { box-shadow: 0 14px 40px rgba(255,45,120,.6); }
+    .bghost { background: rgba(255,255,255,.07); border: 1.5px solid rgba(255,255,255,.18); color: #fff; }
+    .bghost:hover { background: rgba(255,255,255,.13); }
+
+    .deco { position: absolute; font-size: 2rem; opacity: .5; pointer-events: none; animation: floatY 4s ease-in-out infinite alternate; }
+    .deco:nth-child(1) { top: 13%; left: 7%;  animation-duration:5s; }
+    .deco:nth-child(2) { top: 18%; right:6%;  animation-duration:3.5s; animation-delay:-1s; }
+    .deco:nth-child(3) { bottom:16%; left:6%; animation-duration:6s; animation-delay:-2s; }
+    .deco:nth-child(4) { bottom:20%; right:5%;animation-duration:4.5s; animation-delay:-3s; }
+    @keyframes floatY { from {transform:translateY(0) rotate(-4deg);} to {transform:translateY(-18px) rotate(5deg);} }
+
+    /* ── STATS BAR ── */
+    .stats-bar {
+      position: relative; z-index: 1;
+      background: linear-gradient(90deg, var(--hot), #C026D3, var(--volt));
+      padding: 1.6rem 2rem;
+      display: flex; justify-content: center; gap: 3.5rem; flex-wrap: wrap;
+    }
+    .sstat { text-align: center; }
+    .snum { font-family: 'Nunito', sans-serif; font-size: 2rem; font-weight: 900; display: block; line-height:1; }
+    .slbl { font-size: .83rem; color: rgba(255,255,255,.75); font-weight: 600; }
+
+    /* ── SECTIONS ── */
+    section { position: relative; z-index: 1; padding: 5.5rem 2rem; }
+    .inn { max-width: 1120px; margin: 0 auto; }
+    .chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: .3rem .95rem; border-radius: 99px;
+      font-size: .78rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .chip-hot  { background: linear-gradient(90deg,var(--sun),var(--hot)); color: var(--ink); }
+    .chip-volt { background: linear-gradient(90deg,var(--volt),var(--ice)); color: #fff; }
+    .chip-mint { background: linear-gradient(90deg,var(--mint),var(--ice)); color: var(--ink); }
+    .stitle { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: clamp(2rem,4.5vw,2.9rem); letter-spacing:-1px; line-height:1.1; margin-bottom:.9rem; }
+    .ssub  { color: rgba(255,255,255,.5); font-size:1.05rem; max-width:520px; margin-bottom:3rem; }
+
+    /* ── CARDS ── */
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(295px, 1fr)); gap: 1.4rem; }
+    .card {
+      border-radius: var(--r); padding: 2rem 1.8rem;
+      text-decoration: none; color: inherit;
+      position: relative; overflow: hidden;
+      transition: transform .22s, box-shadow .22s;
+      cursor: pointer;
+    }
+    .card:hover { transform: translateY(-7px) rotate(.4deg); }
+    .card::before { content:''; position:absolute; inset:0; border-radius:var(--r); background:radial-gradient(circle at 75% 15%, rgba(255,255,255,.07), transparent 55%); pointer-events:none; }
+
+    .ck1 { background: linear-gradient(145deg,#1a0040,#32008a); border: 1.5px solid rgba(123,47,255,.45); }
+    .ck2 { background: linear-gradient(145deg,#240000,#5c1000); border: 1.5px solid rgba(255,45,120,.45); }
+    .ck3 { background: linear-gradient(145deg,#001520,#003850); border: 1.5px solid rgba(0,229,255,.4); }
+    .ck4 { background: linear-gradient(145deg,#001800,#003800); border: 1.5px solid rgba(0,255,157,.4); }
+    .ck5 { background: linear-gradient(145deg,#1e0020,#440050); border: 1.5px solid rgba(255,45,120,.4); }
+    .ck6 { background: linear-gradient(145deg, var(--volt), var(--hot)); border: none; }
+
+    .cej  { font-size: 2.9rem; margin-bottom: 1rem; display: block; }
+    .card h3 { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 1.25rem; margin-bottom:.5rem; }
+    .card p  { color: rgba(255,255,255,.57); font-size: .92rem; line-height:1.62; }
+    .carrow {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: .83rem; font-weight: 800; margin-top: 1rem;
+      padding: .32rem .88rem; border-radius: 99px;
+      background: rgba(255,255,255,.11); color:#fff; text-decoration:none;
+      transition: background .2s;
+    }
+    .carrow:hover { background: rgba(255,255,255,.2); }
+
+    /* ── STEPS ── */
+    .steps { display:flex; flex-direction:column; gap:1rem; max-width:720px; }
+    .srow {
+      display:flex; gap:1.25rem; align-items:flex-start;
+      background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07);
+      border-radius:16px; padding:1.5rem;
+      transition:background .2s, transform .2s;
+    }
+    .srow:hover { background:rgba(255,255,255,.08); transform:translateX(7px); }
+    .srow:nth-child(1) .sn { background: linear-gradient(135deg,var(--hot),#FF7B2F); }
+    .srow:nth-child(2) .sn { background: linear-gradient(135deg,var(--volt),var(--ice)); }
+    .srow:nth-child(3) .sn { background: linear-gradient(135deg,#00C896,var(--ice)); }
+    .srow:nth-child(4) .sn { background: linear-gradient(135deg,var(--sun),#FF7B2F); }
+    .srow:nth-child(5) .sn { background: linear-gradient(135deg,var(--mint),var(--ice)); }
+    .sn { flex-shrink:0; width:44px; height:44px; border-radius:12px; font-family:'Nunito',sans-serif; font-weight:900; font-size:1.2rem; color:var(--ink); display:flex; align-items:center; justify-content:center; }
+    .srow h4 { font-family:'Nunito',sans-serif; font-weight:800; font-size:1.05rem; margin-bottom:.3rem; }
+    .srow p  { color:rgba(255,255,255,.52); font-size:.92rem; }
+
+    /* ── TABLE ── */
+    .twrap { overflow-x:auto; border-radius:20px; border:1.5px solid rgba(255,255,255,.1); }
+    table { width:100%; border-collapse:collapse; font-size:.94rem; }
+    thead { background:linear-gradient(90deg,var(--volt),var(--hot)); }
+    thead th { padding:1rem 1.25rem; text-align:left; font-family:'Nunito',sans-serif; font-weight:900; color:#fff; }
+    tbody tr { border-bottom:1px solid rgba(255,255,255,.07); transition:background .15s; }
+    tbody tr:last-child { border-bottom:none; }
+    tbody tr:hover { background:rgba(255,255,255,.04); }
+    tbody td { padding:.88rem 1.25rem; color:rgba(255,255,255,.72); }
+    tbody td:first-child { font-weight:800; color:var(--sun); }
+
+    /* ── CTA ── */
+    .ctabox {
+      border-radius:32px; overflow:hidden;
+      background: linear-gradient(135deg, var(--hot) 0%, var(--volt) 50%, var(--ice) 100%);
+      padding:5rem 2rem; text-align:center; position:relative;
+    }
+    .ctabox::before {
+      content:''; position:absolute; inset:0;
+      background:url("data:image/svg+xml,%3Csvg width='50' height='50' viewBox='0 0 50 50' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='25' cy='25' r='1.5' fill='%23ffffff' fill-opacity='0.07'/%3E%3C/svg%3E");
+    }
+    .ctabox h2 { font-family:'Nunito',sans-serif; font-weight:900; font-size:2.3rem; margin-bottom:.7rem; position:relative; letter-spacing:-1px; }
+    .ctabox p  { opacity:.82; margin-bottom:2.2rem; font-size:1.08rem; position:relative; }
+    .bink {
+      background:var(--ink); color:var(--sun);
+      padding:.88rem 2.2rem; border-radius:14px;
+      font-family:'Nunito',sans-serif; font-weight:900; font-size:1rem;
+      text-decoration:none; position:relative; display:inline-block;
+      box-shadow:0 0 0 3px rgba(255,208,0,.3);
+      transition:transform .15s, box-shadow .2s;
+    }
+    .bink:hover { transform:scale(1.06); box-shadow:0 0 0 5px rgba(255,208,0,.5), 0 14px 34px rgba(0,0,0,.4); }
+
+    /* ── FOOTER ── */
+    footer {
+      position:relative; z-index:1;
+      background:rgba(0,0,0,.55); border-top:1px solid rgba(255,255,255,.07);
+      padding:2.5rem 2rem; text-align:center;
+    }
+    .flinks { display:flex; justify-content:center; gap:1.5rem; margin-bottom:.8rem; flex-wrap:wrap; }
+    .flinks a { color:rgba(255,255,255,.38); text-decoration:none; font-size:.87rem; transition:color .2s; }
+    .flinks a:hover { color:var(--sun); }
+    footer p { color:rgba(255,255,255,.28); font-size:.84rem; }
+    footer a { color:var(--hot); text-decoration:none; }
+
+    /* ── KEYFRAMES ── */
+    @keyframes popIn  { from{opacity:0;transform:scale(.65);}  to{opacity:1;transform:scale(1);} }
+    @keyframes riseUp { from{opacity:0;transform:translateY(28px);} to{opacity:1;transform:none;} }
+    .rev { opacity:0; transform:translateY(26px); transition:opacity .6s ease, transform .6s ease; }
+    .rev.on { opacity:1; transform:none; }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:680px){
+      .links,.npill{display:none;}
+      .ham{display:flex;}
+      .links.open{ display:flex; flex-direction:column; position:absolute; top:70px; left:0; right:0; background:rgba(9,9,15,.96); padding:1rem; border-bottom:1px solid rgba(255,255,255,.08); z-index:999; }
+      .hero{min-height:85vh;}
+      section{padding:3.5rem 1.25rem;}
+      .deco{display:none;}
+      .stats-bar{gap:2rem;}
     }
   </style>
-  <style>
-    .btn-img-3d {
-      background: none;
-      border: 1px solid black;
-      padding: 0;
-      box-shadow: 0 6px #888;
-      border-radius: 10px;
-      overflow: hidden;
-      transition: all 0.2s ease;
-    }
+</head>
+<body>
 
-    .btn-img-3d img {
-      display: block;
-      height: 80px;
-      width: 90px;
-      border-radius: 10px;
-    }
+<div id="blobs">
+  <div class="b b1"></div><div class="b b2"></div>
+  <div class="b b3"></div><div class="b b4"></div>
+</div>
 
-    .btn-img-3d:hover {
-      transform: translateY(2px);
-      box-shadow: 0 4px #666;
-    }
+<!-- NAV -->
+<nav>
+  <a class="brand" href="index.html">
+    <img src="image/logo.png" alt="logo"/>Xpenso
+  </a>
+  <ul class="links" id="links">
+    <li><a href="index.html" class="on">Home</a></li>
+    <li><a href="html/instruction.html">How to Use</a></li>
+    <li><a href="html/data-visualization.html">Data Info</a></li>
+    <li><a href="html/feedback.html">Feedback</a></li>
+  </ul>
+  <a class="npill" href="html/feedback.html">✦ Feedback</a>
+  <div class="ham" onclick="document.getElementById('links').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
 
-    .btn-img-3d:active {
-      transform: translateY(4px);
-      box-shadow: 0 2px #444;
-    }
-  </style>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2006745470283511"
-     crossorigin="anonymous"></script>
-  </head>
-  <body>
+<!-- HERO -->
+<section class="hero">
+  <span class="deco">📊</span><span class="deco">⚡</span>
+  <span class="deco">🚀</span><span class="deco">💡</span>
 
-    <header>
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-        <div class="container">
-          <a class="navbar-brand" href="index.html">Xpenso<img src="image/logo.png" height="20" width="20"></a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav ml-auto">
-              <li class="nav-item">
-                <a class="nav-link" href="index.html">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="html/instruction.html">Instruction</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#contact">Upcoming</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-    </header>
+  <div class="htag">✦ Smart Data Management</div>
+  <h1>
+    <span class="w1">Your Data,</span><br/>
+    <span class="w2">Supercharged!</span>
+  </h1>
+  <p>Powerful, fun tools to collect, visualize and report your data — from personal budgets to professional analytics.</p>
+  <div class="hbtns">
+    <a class="bpop bhot"   href="html/instruction.html">🚀 Get Started</a>
+    <a class="bpop bghost" href="html/data-visualization.html">Learn More →</a>
+  </div>
+</section>
 
-    <main role="main">
-	<div class="cover vh-90">
-		<div class="hero">
-			
-                <div>
-                  <h2 class="featurette-heading">Is Data Processing for Personal Use or Professional Use! <span class="text-muted">It'll blow your mind.</span></h2>
-                  <p class="lead">Personal data processing is managing and organizing info of daily tasks to make better personal decisions while Professional data processing involves complex and large data. </p>
-                   <div class="p-2">
-				   <button class="btn btn-sm btn-outline-secondary p1"><a href="html/data-visualization.html">More</a></button>
-				   </div>
-				</div>
-		</div>
-				<div class="d-flex justify-content-center align-items-center vh-30 bg-light">
-					<button class="btn btn-img-3d">
-						<a href="https://testgrapg-jkkcphfmzqdxrbrov9ldyg.streamlit.app/" target="_blank"><img src="image/btn1.png" alt="Icon Button"></a>
-					  </button>&nbsp;&nbsp;&nbsp;
-					<button class="btn btn-img-3d">
-						<a href="https://report-gqnv8xqxtkraglubp9gbhy.streamlit.app/" target="_blank"><img src="image/btn2.png" alt="Icon Button"></a>
-					  </button>&nbsp;&nbsp;&nbsp;
-					<button class="btn btn-img-3d">
-						<a href="https://3d-app-jhgcjntfnwhp36pbhc6y2p.streamlit.app/" target="_blank"><img src="image/btn3.png" alt="Icon Button"></a>
-						</button>&nbsp;&nbsp;&nbsp;
-				</div>
-		</div>
-	
-            <!-- Marketing messaging and featurettes
-            ================================================== -->
-            <!-- Wrap the rest of the page in another container to center all the content. -->
+<!-- STATS -->
+<div class="stats-bar z">
+  <div class="sstat"><span class="snum">5+</span><span class="slbl">Powerful Tools</span></div>
+  <div class="sstat"><span class="snum">100%</span><span class="slbl">Free to Use</span></div>
+  <div class="sstat"><span class="snum">∞</span><span class="slbl">Data Records</span></div>
+  <div class="sstat"><span class="snum">Fast</span><span class="slbl">Chart Export</span></div>
+</div>
 
-          <div class="container marketing">
-              <!-- START THE FEATURETTES -->
-              <!-- 1 -->
+<!-- TOOLS -->
+<section>
+  <div class="inn">
+    <div class="rev">
+      <span class="chip chip-hot">⚡ What We Offer</span>
+      <h2 class="stitle">Powerful Tools,<br/>Zero Complexity</h2>
+      <p class="ssub">Everything you need to handle your data — beautifully designed and ridiculously easy to use.</p>
+    </div>
+    <div class="grid">
+      <a class="card ck1 rev" href="html/">
+        <span class="cej">📈</span>
+        <h3>Data Visualization</h3>
+        <p>Upload your file, pick a chart type, and instantly get stunning graphs you can download as an image.</p>
+        <span class="carrow">Explore →</span>
+      </a>
+      <a class="card ck2 rev" href="html/instruction.html">
+        <span class="cej">🗂️</span>
+        <h3>Data Collection</h3>
+        <p>Name your file, define columns, and start storing records. Download or revisit your data anytime.</p>
+        <span class="carrow">Explore →</span>
+      </a>
+      <a class="card ck3 rev" href="html/instruction.html">
+        <span class="cej">📝</span>
+        <h3>Report Generator</h3>
+        <p>Upload a file and get an instant, shareable summary report — downloaded in seconds.</p>
+        <span class="carrow">Explore →</span>
+      </a>
+      <a class="card ck4 rev" href="html/instruction.html">
+        <span class="cej">🧊</span>
+        <h3>3-D Graph</h3>
+        <p>Generate jaw-dropping three-dimensional graphs from your datasets for richer storytelling.</p>
+        <span class="carrow">Explore →</span>
+      </a>
+      <a class="card ck5 rev" href="html/feedback.html">
+        <span class="cej">💬</span>
+        <h3>Feedback</h3>
+        <p>Share ideas, report bugs, or request features. Your voice directly shapes what we build next.</p>
+        <span class="carrow">Send Feedback →</span>
+      </a>
+      <div class="card ck6 rev">
+        <span class="cej">🔮</span>
+        <h3>Coming Soon!</h3>
+        <p>AI-powered insights, expense tracking, team collaboration — the future is loading...</p>
+        <span class="carrow" style="background:rgba(0,0,0,.2);">Stay tuned →</span>
+      </div>
+    </div>
+  </div>
+</section>
 
-              <hr class="featurette-divider">
-				<!-- 2 -->
-              <div class="row featurette">
-                <div class="col-md-7 order-md-2">
-                  <h2 class="featurette-heading">In a difficult position to choose?  <span class="text-muted">Always choose what's best.</span></h2>
-                  <p class="lead">This platform lets you easily build data visualizations, create custom data storage forms, and view summary reports of your files — all with just a click. Simply choose the button below that fits your needs.</p>
-					<div class="p-2">
-					<button class="btn btn-sm btn-outline-secondary"><a href="html/instruction.html">More</a></button>
-					</div>
-				</div>
-                <div class="col-md-5 order-md-1">
-                  <img class="featurette-image img-fluid mx-auto" data-src="holder.js/500x500/auto" alt="500x500" src="image/s2.png">
-                </div>
-              </div>
+<!-- HOW IT WORKS -->
+<section>
+  <div class="inn">
+    <div class="rev">
+      <span class="chip chip-volt">🗺️ Step by Step</span>
+      <h2 class="stitle">How to Use Xpenso</h2>
+      <p class="ssub">Getting started takes less than a minute — for real.</p>
+    </div>
+    <div class="steps">
+      <div class="srow rev"><div class="sn">1</div><div><h4>Data Visualization</h4><p>Click the button or image to enter the tool. Upload your file, select a graph type, and download the chart as an image.</p></div></div>
+      <div class="srow rev"><div class="sn">2</div><div><h4>Data Collection</h4><p>Enter a file name, list column names separated by commas. A smart form appears — fill it and save as many records as needed.</p></div></div>
+      <div class="srow rev"><div class="sn">3</div><div><h4>Report Generation</h4><p>Upload your file and get an automatic summary report. Download it for sharing or archiving.</p></div></div>
+      <div class="srow rev"><div class="sn">4</div><div><h4>3-D Graph</h4><p>Render your data in a stunning three-dimensional view — perfect for presentations and deeper insight.</p></div></div>
+      <div class="srow rev"><div class="sn">5</div><div><h4>Feedback &amp; Upcoming</h4><p>Use the Feedback section to request features or report issues. Check Upcoming for the latest news.</p></div></div>
+    </div>
+  </div>
+</section>
 
-              <hr class="featurette-divider">
-			  
-			   <!-- 3 -->
+<!-- TABLE -->
+<section>
+  <div class="inn">
+    <div class="rev">
+      <span class="chip chip-mint">📊 Use Cases</span>
+      <h2 class="stitle">Personal vs. Professional</h2>
+      <p class="ssub">Xpenso scales from everyday personal finance to enterprise-level data workflows.</p>
+    </div>
+    <div class="twrap rev">
+      <table>
+        <thead><tr><th>Aspect</th><th>🏠 Personal Use</th><th>🏢 Professional Use</th></tr></thead>
+        <tbody>
+          <tr><td>Scale</td><td>Small to medium datasets</td><td>Large &amp; complex datasets</td></tr>
+          <tr><td>Purpose</td><td>Convenience &amp; personal insights</td><td>Business decisions &amp; compliance</td></tr>
+          <tr><td>Complexity</td><td>Simple processing</td><td>Advanced algorithms &amp; integrations</td></tr>
+          <tr><td>Privacy</td><td>Personal privacy focus</td><td>Regulatory &amp; enterprise-grade</td></tr>
+          <tr><td>Team</td><td>Individual user</td><td>Data teams &amp; specialists</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
 
-            <div class="row featurette">
-                <div class="col-md-7 order-md-1">
-				<h2 class="featurette-heading">Data visualization. <span class="text-muted">See the pictures behind your numbers.</span></h2>
-                  <p class="lead">Execute dynamic graphs—bar charts for comparisons, pie charts for proportions, line graphs for trends, and area charts for cumulative insights—helping you understand your data from every angle.</p>
-				</div>
-                <div class="col-md-5 order-md-2">
-                  <a href="https://testgrapg-jkkcphfmzqdxrbrov9ldyg.streamlit.app/" target="_blank">
-					<img class="featurette-image img-fluid mx-auto" data-src="holder.js/500x500/auto" alt="500x500" src="image/s3.png"></a>
-				       <div class="p-2">
-					   <button class="btn btn-sm btn-outline-secondary"><a href="https://testgrapg-jkkcphfmzqdxrbrov9ldyg.streamlit.app/" target="_blank">click here</a></button>
-					   </div>
-				</div>
-             </div>
-			 </br>
-			 
-			 <!-- 4 -->
-			  
-			  <div class="row featurette">
-                <div class="col-md-5 order-md-1">
-                  <a href="https://userinput-b7cinftjxz6ewbyndljvme.streamlit.app/" target="_blank"><img class="featurette-image img-fluid mx-auto" data-src="holder.js/500x500/auto" alt="500x500" src="image/s4.png"></a>
-					<div class="p-2">
-					<button class="btn btn-sm btn-outline-secondary"><a href="https://userinput-b7cinftjxz6ewbyndljvme.streamlit.app/" target="_blank">click here</a></button>
-                    </div>
-                </div>
-				<div class="col-md-7 order-md-2">
-                  <h2 class="featurette-heading">Data Collection. <span class="text-muted">Store your data here.</span></h2>
-					<p class="lead">From day-to-day data tracking to build your own data collection form here. It's a simple, powerful tool to collect, organize, and export high-quality user input data for training AI models, testing applications, or fueling analytics.</p>
-                </div>
-              </div>
-			  
-			   <!-- 5 -->
-			  
-			  <div class="row featurette">
-				<div class="col-md-5 order-md-2">
-                  <a href="https://report-gqnv8xqxtkraglubp9gbhy.streamlit.app/" target="_blank"><img class="featurette-image img-fluid mx-auto" data-src="holder.js/500x500/auto" alt="500x500" src="image/s5.png"></a>
-					<div class="p-2">
-					<button class="btn btn-sm btn-outline-secondary"><a href="https://report-gqnv8xqxtkraglubp9gbhy.streamlit.app/" target="_blank">click here</a></button>
-                    </div>
-                </div>
-                <div class="col-md-7 order-md-1">
-                  <h2 class="featurette-heading">Report <span class="text-muted">Run reports with a single click.</span></h2>
-					<p class="lead">Generate detailed reports instantly with a single click—no setup, no hassle. Perfect for quick insights and fast decision-making.</p>
-                </div>
-              </div>
-			  
-			   <!-- 6 -->
-			  
-			  <div class="row featurette">
-                <div class="col-md-7 order-md-2">
-                  <h2 class="featurette-heading">3-D Graph. <span class="text-muted">Create your 3-D graph for a better presentation.</span></h2>
-                  <p class="lead">colem.</p>
-                </div>
-                <div class=" col-md-5 order-md-1">
-                  <a href="https://3d-app-jhgcjntfnwhp36pbhc6y2p.streamlit.app/" target="_blank"><img class="featurette-image img-fluid mx-auto" data-src="holder.js/500x500/auto" alt="500x500" src="image/s6.png"></a>
-					<div class="p-2">
-					<button class="btn btn-sm btn-outline-secondary"><a href="https://3d-app-jhgcjntfnwhp36pbhc6y2p.streamlit.app/" target="_blank">click here</a></button>
-                    </div>
-                </div>
-              </div>
-			  
-			  <!-- 7 -->
-			  
-			  <div class="row featurette">
-                <div class="col-md-7 order-md-1">
-                  <h2 class="featurette-heading">Feedback. <span class="text-muted">Give your feedback here.</span></h2>
-                  <p class="lead">Help us to grow with your feedback.</p>
-                </div>
-                <div class=" col-md-5 order-md-2">
-                  <a href="html/feedback.html"><img class="featurette-image img-fluid mx-auto" data-src="holder.js/500x500/auto" alt="500x500" src="image/s7.png"></a>
-					<div class="p-2">
-					<button class="btn btn-sm btn-outline-secondary"><a href="html/feedback.html">click here</a></button>
-                    </div>
-                </div>
-              </div>
-			  
+<!-- CTA -->
+<section>
+  <div class="inn">
+    <div class="ctabox rev">
+      <h2>Got a suggestion? Let's hear it! 🎤</h2>
+      <p>Your feedback shapes the future of Xpenso. We read every single message.</p>
+      <a class="bink" href="html/feedback.html">Send Feedback ✦</a>
+    </div>
+  </div>
+</section>
 
-              <hr class="featurette-divider">
+<!-- FOOTER -->
+<footer>
+  <div class="flinks">
+    <a href="index.html">Home</a>
+    <a href="html/instruction.html">How to Use</a>
+    <a href="html/data-visualization.html">Data Info</a>
+    <a href="html/feedback.html">Feedback</a>
+    <a href="html/privacypolicy.html">Privacy Policy</a>
+    <a href="html/termsofservice.html">Terms of Service</a>
+  </div>
+  <p>© 2025 Xpenso · Built with 💛 · <a href="mailto:chowdhuryfarahnoor@gmail.com">chowdhuryfarahnoor@gmail.com</a></p>
+</footer>
 
-              <!-- /END THE FEATURETTES -->
-
-          </div><!-- /.container -->
-
-
-            <!-- FOOTER -->
-            <footer class="container">
-              <p class="float-right"><a href="index.html">Back to top</a></p>
-              <p>© Xpenso 2025. · <a href="html/privacypolicy.html">Privacy</a> · <a href="html/termsofservoce.html">Terms</a></p>
-            </footer>
-    </main>
-	<a href="feedback/frontend/frontend.html"><button class="btn btn-primary position-fixed end-0 bottom-0 m-3" data-bs-toggle="modal" data-bs-target="#messageModal">Send Message</button></a>
-
-    <!--  JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script>
-      $(document).ready(function() {
-        // Add 'active' class to the clicked navigation item
-        $(".navbar-nav .nav-link").on("click", function() {
-          $(".navbar-nav").find(".active").removeClass("active");
-          $(this).addClass("active");
-        });
-
-        // Add 'active' class to the navigation item based on the current scroll position
-        $(window).on("scroll", function() {
-          var scrollPos = $(document).scrollTop();
-          $(".section").each(function() {
-            var offsetTop = $(this).offset().top - 50;
-            var sectionId = $(this).attr("id");
-
-            if (scrollPos >= offsetTop) {
-              $(".navbar-nav").find(".active").removeClass("active");
-              $(".navbar-nav").find("[href='#" + sectionId + "']").addClass("active");
-            }
-          });
-        });
-      });
-    </script>
-  
-  </body>
+<script>
+  const els = document.querySelectorAll('.rev');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e,i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('on'), i * 85);
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  els.forEach(el => io.observe(el));
+</script>
+</body>
 </html>
